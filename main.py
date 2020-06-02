@@ -4,11 +4,13 @@ import numpy as np
 
 font = cv2.FONT_HERSHEY_COMPLEX
 
+color =[]
+
 # ok ~
-lower_red = np.array([140, 50, 50])
+lower_red = np.array([140, 100, 100])
 upper_red = np.array([180, 255, 255])
 
-lower_red_low = np.array([0,0,0])
+lower_red_low = np.array([0,100,100])
 upper_red_low = np.array([10,255,255])
 
 # ok
@@ -27,8 +29,8 @@ upper_orange = np.array([15, 255, 255])
 lower_yellow = np.array([16, 50, 50])
 upper_yellow = np.array([60, 255, 255])
 
-lower_white = np.array([0, 240, 240])
-upper_white = np.array([0, 255, 255])
+lower_white = np.array([0,0,150])
+upper_white = np.array([172,111,255])
 
 def nothing():
     pass
@@ -43,6 +45,7 @@ def detect_face(img):
     mask_yellow = cv2.inRange(hsv, lower_yellow, upper_yellow)
     mask_white = cv2.inRange(hsv, lower_white, upper_white)
     mask_red_low = cv2.inRange(hsv, lower_red_low, upper_red_low)
+    mask_red = mask_red + mask_red_low    
     # Permet d'erode les mask et donc d'avoir plus de précision
     kernel = np.ones((5, 5), np.uint8)
     mask_red = cv2.erode(mask_red, kernel)
@@ -51,7 +54,6 @@ def detect_face(img):
     mask_orange = cv2.erode(mask_orange, kernel)
     mask_yellow = cv2.erode(mask_yellow, kernel)
     mask_white = cv2.erode(mask_white, kernel)
-    mask_red_low = cv2.erode(mask_red_low, kernel)
     # Détection des contours pour chaque couleurs
     contours_red, _ = cv2.findContours(mask_red, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
     contours_blue, _ = cv2.findContours(mask_blue, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
@@ -59,28 +61,19 @@ def detect_face(img):
     contours_orange, _ = cv2.findContours(mask_orange, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
     contours_yellow, _ = cv2.findContours(mask_yellow, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
     contours_white, _ = cv2.findContours(mask_white, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-    contours_red_low, _ = cv2.findContours(mask_red_low, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
     # Dessin des contours
     for cnt_red in contours_red:
         area = cv2.contourArea(cnt_red)
-
-        if area > 250:
+        if area > 300:
             x, y, w, h = cv2.boundingRect(cnt_red)
             img = cv2.rectangle(img, (x, y), (x + w, y + h), (0, 0, 255), 2)
             cv2.putText(img, "rouge", (x, y), font, 1, (255, 255, 255))
-
-    for cnt_red_low in contours_red_low:
-        area = cv2.contourArea(cnt_red_low)
-
-        if area > 250:
-            x, y, w, h = cv2.boundingRect(cnt_red_low)
-            img = cv2.rectangle(img, (x, y), (x + w, y + h), (0, 0, 255), 2)
-            cv2.putText(img, "rouge", (x, y), font, 1, (0, 0, 0))
+            color.append("red")
 
     for cnt_blue in contours_blue:
-        area = cv2.contourArea(cnt_blue)
+        area = cv2.contourArea(cnt_blue)    
 
-        if area > 250:
+        if area > 300:
             x, y, w, h = cv2.boundingRect(cnt_blue)
             img = cv2.rectangle(img, (x, y), (x + w, y + h), (255, 0, 0), 2)
             cv2.putText(img, "bleu", (x, y), font, 1, (255, 255, 255))
@@ -88,7 +81,7 @@ def detect_face(img):
     for cnt_green in contours_green:
         area = cv2.contourArea(cnt_green)
 
-        if area > 250:
+        if area > 300:
             x, y, w, h = cv2.boundingRect(cnt_green)
             img = cv2.rectangle(img, (x, y), (x + w, y + h), (0, 255, 0), 2)
             cv2.putText(img, "vert", (x, y), font, 1, (255, 255, 255))
@@ -96,7 +89,7 @@ def detect_face(img):
     for cnt_orange in contours_orange:
         area = cv2.contourArea(cnt_orange)
 
-        if area > 250:
+        if area > 300:
             x, y, w, h = cv2.boundingRect(cnt_orange)
             img = cv2.rectangle(img, (x, y), (x + w, y + h), (0, 165, 255), 2)
             cv2.putText(img, "orange", (x, y), font, 1, (255, 255, 255))
@@ -104,7 +97,7 @@ def detect_face(img):
     for cnt_yellow in contours_yellow:
         area = cv2.contourArea(cnt_yellow)
 
-        if area > 250:
+        if area > 300:
             x, y, w, h = cv2.boundingRect(cnt_yellow)
             img = cv2.rectangle(img, (x, y), (x + w, y + h), (0, 255, 255), 2)
             cv2.putText(img, "yellow", (x, y), font, 1, (0, 0, 0))
@@ -112,7 +105,8 @@ def detect_face(img):
     for cnt_white in contours_white:
         area = cv2.contourArea(cnt_white)
 
-        if area > 250:
+
+        if area > 300:
             x, y, w, h = cv2.boundingRect(cnt_white)
             img = cv2.rectangle(img, (x, y), (x + w, y + h), (255, 255, 255), 2)
             cv2.putText(img, "white", (x, y), font, 1, (255, 255, 255))
@@ -156,6 +150,8 @@ cv2.imshow("rouge", rouge)
 cv2.imshow("orange", orange)
 cv2.imshow("jaune", jaune)
 cv2.imshow("vert", vert)
+
+print(color)
 # arret du programme
 cv2.waitKey(0)
 cv2.destroyAllWindows()
