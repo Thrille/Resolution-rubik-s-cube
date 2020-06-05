@@ -11,25 +11,25 @@ lower_red = np.array([140, 100, 100])
 upper_red = np.array([180, 255, 255])
 
 lower_red_low = np.array([0,100,100])
-upper_red_low = np.array([10,255,255])
+upper_red_low = np.array([5,255,255])
 
 # ok
-lower_blue = np.array([101, 50, 50])
+lower_blue = np.array([101, 75, 75])
 upper_blue = np.array([150, 255, 255])
 
 # ok
-lower_green = np.array([46, 50, 50])
+lower_green = np.array([46, 75, 75])
 upper_green = np.array([100, 255, 255])
 
 # ok
-lower_orange = np.array([10, 50, 50])
+lower_orange = np.array([5, 75, 75])
 upper_orange = np.array([15, 255, 255])
 
 # ok
-lower_yellow = np.array([16, 50, 50])
+lower_yellow = np.array([16, 75, 75])
 upper_yellow = np.array([60, 255, 255])
 
-lower_white = np.array([0,0,150])
+lower_white = np.array([0,0,140])
 upper_white = np.array([172,111,255])
 
 def nothing():
@@ -70,47 +70,52 @@ def detect_face(img):
     for cnt_red in contours_red:
         area = cv2.contourArea(cnt_red)
         approxim = approx(cnt_red)
-        if area > 300 and len(approxim) == 4:
+        if area > 250 and area < 10000 and len(approxim) == 4:
             x, y, w, h = cv2.boundingRect(approxim)
+            ar = w/ float(h)     
             img = cv2.rectangle(img, (x, y), (x + w, y + h), (0, 0, 255), 2)
             cv2.putText(img, "rouge", (x, y), font, 1, (255, 255, 255))
 
     for cnt_blue in contours_blue:
         area = cv2.contourArea(cnt_blue)    
         approxim = approx(cnt_blue)
-        if area > 300 and len(approxim) == 4:
+        if area > 250 and area < 10000 and len(approxim) == 4:
             x, y, w, h = cv2.boundingRect(approxim)
+            ar = w/ float(h)
             img = cv2.rectangle(img, (x, y), (x + w, y + h), (255, 0, 0), 2)
             cv2.putText(img, "bleu", (x, y), font, 1, (255, 255, 255))
 
     for cnt_green in contours_green:
         area = cv2.contourArea(cnt_green)
         approxim = approx(cnt_green)
-        if area > 300 and len(approxim) == 4:
+        if area > 250 and area < 10000 and len(approxim) == 4:
             x, y, w, h = cv2.boundingRect(approxim)
+            ar = w/ float(h)
             img = cv2.rectangle(img, (x, y), (x + w, y + h), (0, 255, 0), 2)
             cv2.putText(img, "vert", (x, y), font, 1, (255, 255, 255))
 
     for cnt_orange in contours_orange:
         area = cv2.contourArea(cnt_orange)
         approxim = approx(cnt_orange)
-        if area > 300 and len(approxim) == 4:
+        if area > 250 and area < 10000 and len(approxim) == 4:
             x, y, w, h = cv2.boundingRect(approxim)
+            ar = w/ float(h)
             img = cv2.rectangle(img, (x, y), (x + w, y + h), (0, 165, 255), 2)
             cv2.putText(img, "orange", (x, y), font, 1, (255, 255, 255))
 
     for cnt_yellow in contours_yellow:
         area = cv2.contourArea(cnt_yellow)
         approxim = approx(cnt_yellow)
-        if area > 300 and len(approxim) == 4:
+        if area > 250 and area < 10000 and len(approxim) == 4:
             x, y, w, h = cv2.boundingRect(approxim)
+            ar = w/ float(h)
             img = cv2.rectangle(img, (x, y), (x + w, y + h), (0, 255, 255), 2)
             cv2.putText(img, "yellow", (x, y), font, 1, (0, 0, 0))
 
     for cnt_white in contours_white:
         area = cv2.contourArea(cnt_white)
         approxim = approx(cnt_white)
-        if area > 300 and len(approxim) == 4:
+        if area > 250 and area < 10000 and len(approxim) == 4:
             x, y, w, h = cv2.boundingRect(approxim)
             ar = w / float(h)
             if ar >=0.95 and ar <=1.05:
