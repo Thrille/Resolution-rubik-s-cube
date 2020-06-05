@@ -35,6 +35,11 @@ upper_white = np.array([172,111,255])
 def nothing():
     pass
 
+def approx(c):
+    peri = cv2.arcLength(c, True)
+    approx = cv2.approxPolyDP(c, 0.04 * peri, True)
+    return approx
+
 def detect_face(img):
     hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
     # Mask en fonction des couleurs
@@ -64,52 +69,53 @@ def detect_face(img):
     # Dessin des contours
     for cnt_red in contours_red:
         area = cv2.contourArea(cnt_red)
-        if area > 300:
-            x, y, w, h = cv2.boundingRect(cnt_red)
+        approxim = approx(cnt_red)
+        if area > 300 and len(approxim) == 4:
+            x, y, w, h = cv2.boundingRect(approxim)
             img = cv2.rectangle(img, (x, y), (x + w, y + h), (0, 0, 255), 2)
             cv2.putText(img, "rouge", (x, y), font, 1, (255, 255, 255))
-            color.append("red")
 
     for cnt_blue in contours_blue:
         area = cv2.contourArea(cnt_blue)    
-
-        if area > 300:
-            x, y, w, h = cv2.boundingRect(cnt_blue)
+        approxim = approx(cnt_blue)
+        if area > 300 and len(approxim) == 4:
+            x, y, w, h = cv2.boundingRect(approxim)
             img = cv2.rectangle(img, (x, y), (x + w, y + h), (255, 0, 0), 2)
             cv2.putText(img, "bleu", (x, y), font, 1, (255, 255, 255))
 
     for cnt_green in contours_green:
         area = cv2.contourArea(cnt_green)
-
-        if area > 300:
-            x, y, w, h = cv2.boundingRect(cnt_green)
+        approxim = approx(cnt_green)
+        if area > 300 and len(approxim) == 4:
+            x, y, w, h = cv2.boundingRect(approxim)
             img = cv2.rectangle(img, (x, y), (x + w, y + h), (0, 255, 0), 2)
             cv2.putText(img, "vert", (x, y), font, 1, (255, 255, 255))
 
     for cnt_orange in contours_orange:
         area = cv2.contourArea(cnt_orange)
-
-        if area > 300:
-            x, y, w, h = cv2.boundingRect(cnt_orange)
+        approxim = approx(cnt_orange)
+        if area > 300 and len(approxim) == 4:
+            x, y, w, h = cv2.boundingRect(approxim)
             img = cv2.rectangle(img, (x, y), (x + w, y + h), (0, 165, 255), 2)
             cv2.putText(img, "orange", (x, y), font, 1, (255, 255, 255))
 
     for cnt_yellow in contours_yellow:
         area = cv2.contourArea(cnt_yellow)
-
-        if area > 300:
-            x, y, w, h = cv2.boundingRect(cnt_yellow)
+        approxim = approx(cnt_yellow)
+        if area > 300 and len(approxim) == 4:
+            x, y, w, h = cv2.boundingRect(approxim)
             img = cv2.rectangle(img, (x, y), (x + w, y + h), (0, 255, 255), 2)
             cv2.putText(img, "yellow", (x, y), font, 1, (0, 0, 0))
 
     for cnt_white in contours_white:
         area = cv2.contourArea(cnt_white)
-
-
-        if area > 300:
-            x, y, w, h = cv2.boundingRect(cnt_white)
-            img = cv2.rectangle(img, (x, y), (x + w, y + h), (255, 255, 255), 2)
-            cv2.putText(img, "white", (x, y), font, 1, (255, 255, 255))
+        approxim = approx(cnt_white)
+        if area > 300 and len(approxim) == 4:
+            x, y, w, h = cv2.boundingRect(approxim)
+            ar = w / float(h)
+            if ar >=0.95 and ar <=1.05:
+                img = cv2.rectangle(img, (x, y), (x + w, y + h), (255, 255, 255), 2)
+                cv2.putText(img, "white", (x, y), font, 1, (255, 255, 255))
 
     return img
 
