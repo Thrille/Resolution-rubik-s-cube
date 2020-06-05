@@ -133,6 +133,13 @@ def resize(img):
     resized = cv2.resize(img, dim, interpolation = cv2.INTER_AREA) 
     return resized
 
+# Dans l'orde:
+# U : jaune
+# R : rouge
+# F : Bleu
+# D : blanc
+# L : orange
+# B : vert
 
 # Lecture des images
 bleu = cv2.imread('./images/face_bleu.JPG')
