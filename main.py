@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 import kociemba
 import time
-
+from operator import itemgetter, attrgetter
 
 font = cv2.FONT_HERSHEY_COMPLEX
 
@@ -42,15 +42,22 @@ def approx(c):
     approx = cv2.approxPolyDP(c, 0.04 * peri, True)
     return approx
 
-def tri(struct):
-    for k in range(1, len(struct)):
-        temp=struct[k]
-        j=k
-        while j>0 and temp[0]<struct[j-1][0] and temp[1]<struct[j-1][1]:
-            struct[j] = struct[j-1]
-            j-=1
-        struct[j] = temp
-    print(struct)
+def tri(struct):  
+    s = sorted(struct, key=itemgetter(0)) 
+    tri1 = []
+    tri2 = []
+    tri3 = []
+
+    tri1.extend((s[0], s[1], s[2]))
+    tri2.extend((s[3], s[4], s[5]))
+    tri3.extend((s[6], s[7], s[8]))  
+
+    tri1.sort(key=itemgetter(1))   
+    tri2.sort(key=itemgetter(1))   
+    tri3.sort(key=itemgetter(1))
+    s = tri1+tri2+tri3         
+    for i in range(len(s)):
+        result.append(s[i][4])        
     return ""
 
 def detect_face(img):
@@ -199,10 +206,10 @@ cv2.imshow("orange", orange)
 cv2.imshow("jaune", jaune)
 cv2.imshow("vert", vert)
 
-# s = ''.join(color)
-print(color)
-# solve = kociemba.solve(s)
-# print(solve)
+s = ''.join(result)
+print(result)
+solve = kociemba.solve(s)
+print(solve)
 # arret du programme
 cv2.waitKey(0)
 cv2.destroyAllWindows()
