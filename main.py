@@ -6,7 +6,7 @@ import time
 
 font = cv2.FONT_HERSHEY_COMPLEX
 
-color = []
+result = []
 
 # ok ~
 lower_red = np.array([140, 100, 100])
@@ -41,6 +41,17 @@ def approx(c):
     peri = cv2.arcLength(c, True)
     approx = cv2.approxPolyDP(c, 0.04 * peri, True)
     return approx
+
+def tri(struct):
+    for k in range(1, len(struct)):
+        temp=struct[k]
+        j=k
+        while j>0 and temp[0]<struct[j-1][0] and temp[1]<struct[j-1][1]:
+            struct[j] = struct[j-1]
+            j-=1
+        struct[j] = temp
+    print(struct)
+    return ""
 
 def detect_face(img):
     red_cnt =[]
@@ -78,16 +89,17 @@ def detect_face(img):
     contours_white, _ = cv2.findContours(mask_white, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
     contour_tot, _ = cv2.findContours(mask_tot, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
     # for i in range(9):
-        # Dessin des contours    
+        # Dessin des contours 
+    color = []   
     for cnt_red in contours_red:                
         area = cv2.contourArea(cnt_red)
         approxim = approx(cnt_red)
         if area > 250 and area < 10000 and len(approxim) == 4:
-            x, y, w, h = cv2.boundingRect(approxim)
+            [x, y, w, h] = cv2.boundingRect(approxim)
             ar = w/ float(h)     
             img = cv2.rectangle(img, (x, y), (x + w, y + h), (0, 0, 255), 2)
             cv2.putText(img, "rouge", (x, y), font, 1, (255, 255, 255))           
-            color.append("R")
+            color.append([x,y,w,h,"R"])
   
     for cnt_blue in contours_blue:             
         area = cv2.contourArea(cnt_blue)    
@@ -97,7 +109,7 @@ def detect_face(img):
             ar = w/ float(h)
             img = cv2.rectangle(img, (x, y), (x + w, y + h), (255, 0, 0), 2)
             cv2.putText(img, "bleu", (x, y), font, 1, (255, 255, 255))              
-            color.append("F")                                            
+            color.append([x,y,w,h,"F"])                                            
 
     for cnt_green in contours_green:                  
         area = cv2.contourArea(cnt_green)
@@ -107,7 +119,7 @@ def detect_face(img):
             ar = w/ float(h)
             img = cv2.rectangle(img, (x, y), (x + w, y + h), (0, 255, 0), 2)
             cv2.putText(img, "vert", (x, y), font, 1, (255, 255, 255))                   
-            color.append("B")    
+            color.append([x,y,w,h,"B"])    
    
     for cnt_orange in contours_orange:                 
         area = cv2.contourArea(cnt_orange)
@@ -117,7 +129,7 @@ def detect_face(img):
             ar = w/ float(h)
             img = cv2.rectangle(img, (x, y), (x + w, y + h), (0, 165, 255), 2)
             cv2.putText(img, "orange", (x, y), font, 1, (255, 255, 255))            
-            color.append("L")             
+            color.append([x,y,w,h,"L"])             
  
     for cnt_yellow in contours_yellow:            
         area = cv2.contourArea(cnt_yellow)
@@ -127,7 +139,7 @@ def detect_face(img):
             ar = w/ float(h)
             img = cv2.rectangle(img, (x, y), (x + w, y + h), (0, 255, 255), 2)
             cv2.putText(img, "yellow", (x, y), font, 1, (0, 0, 0))                    
-            color.append("U")             
+            color.append([x,y,w,h,"U"])             
   
     for cnt_white in contours_white:                    
         area = cv2.contourArea(cnt_white)
@@ -138,8 +150,8 @@ def detect_face(img):
             if ar >=0.95 and ar <=1.05:
                 img = cv2.rectangle(img, (x, y), (x + w, y + h), (255, 255, 255), 2)
                 cv2.putText(img, "white", (x, y), font, 1, (255, 255, 255))                         
-                color.append("D")             
-             
+                color.append([x,y,w,h,"D"])             
+    tri(color)
     return img
 
 def resize(img):
@@ -187,8 +199,8 @@ cv2.imshow("orange", orange)
 cv2.imshow("jaune", jaune)
 cv2.imshow("vert", vert)
 
-s = ''.join(color)
-print(s)
+# s = ''.join(color)
+print(color)
 # solve = kociemba.solve(s)
 # print(solve)
 # arret du programme
