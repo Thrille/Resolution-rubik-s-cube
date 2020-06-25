@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<robot name="cube">
+  <link name="cube">  
+      <visual>
+        <geometry>
+            <box size="0.06 0.06 0.06"/>                    
+        </geometry>
+         <material name="blue">
+        <color rgba="0 0 1.0 1.0"/>
+      </material>
+      </visual>
+       <collision>
+      <geometry>
+                 <box size="0.06 0.06 0.06"/>
+      </geometry>
+     
+    </collision>
+  </link> 
+   <link name="cube2">  
+      <visual>
+        <geometry>
+            <box size="0.02 0.02 0.001"/>                    
+        </geometry>
+         <material name="green">
+        <color rgba="0 1.0 0.0 1.0"/>
+      </material>
+      <origin rpy="0 1.57075 0"/>
+      </visual>
+       <collision>
+      <geometry>
+                 <box size="0.02 0.02 0.001"/>
+      </geometry>
+     
+    </collision>
+  </link> 
+  <link name="cube3">  
+      <visual>
+        <geometry>
+            <box size="0.02 0.02 0.001"/>                    
+        </geometry>
+         <material name="red">
+        <color rgba="1.0 0 0.0 1.0"/>
+      </material>
+       <origin rpy="0 1.57075 0"/>
+      </visual>
+       <collision>
+      
+      <geometry>
+                 <box size="0.06 0.06 0.06"/>
+      </geometry>
+     
+    </collision>
+  </link> 
+  <joint name="cube_cube2" type="fixed">
+       <parent link="cube"/>
+       <child link="cube2"/>
+       <origin xyz="0.03 0 0"/>
+     </joint>
+     <joint name="cube_cube3" type="fixed">
+       <parent link="cube"/>
+       <child link="cube3"/>
+       <origin xyz="0.03 0.02 0"/>
+     </joint>
+</robot> 

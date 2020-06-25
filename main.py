@@ -6,30 +6,30 @@ from operator import itemgetter, attrgetter
 
 font = cv2.FONT_HERSHEY_COMPLEX
 
+# tableau pour stocker le résultat
 result = []
 
-# ok ~
+# Valeur haute et basse pour chaque couleur dans le spectre HSV
+# rouge haut
 lower_red = np.array([140, 100, 100])
 upper_red = np.array([180, 255, 255])
 
+# rouge bas
 lower_red_low = np.array([0,100,100])
 upper_red_low = np.array([5,255,255])
 
-# ok
+# bleu
 lower_blue = np.array([101, 75, 75])
 upper_blue = np.array([150, 255, 255])
 
-# ok
-lower_green = np.array([46, 75, 75])
+lower_green = np.array([56, 75, 75])
 upper_green = np.array([100, 255, 255])
 
-# ok
 lower_orange = np.array([5, 75, 75])
 upper_orange = np.array([15, 255, 255])
 
-# ok
 lower_yellow = np.array([16, 75, 75])
-upper_yellow = np.array([60, 255, 255])
+upper_yellow = np.array([55, 255, 255])
 
 lower_white = np.array([0,0,140])
 upper_white = np.array([172,111,255])
@@ -60,7 +60,7 @@ def tri(struct):
         result.append(s[i][4])        
     return ""
 
-def detect_face(img):
+def detect_face(img, trier):
     red_cnt =[]
     blue_cnt =[]
     yellow_cnt =[]
@@ -158,7 +158,8 @@ def detect_face(img):
                 img = cv2.rectangle(img, (x, y), (x + w, y + h), (255, 255, 255), 2)
                 cv2.putText(img, "white", (x, y), font, 1, (255, 255, 255))                         
                 color.append([x,y,w,h,"D"])             
-    tri(color)
+    if trier ==True:
+        tri(color)  
     return img
 
 def resize(img):
@@ -192,12 +193,12 @@ rouge = resize(rouge)
 orange = resize(orange)
 jaune = resize(jaune)
 vert = resize(vert)
-detect_face(jaune)
-detect_face(rouge)
-detect_face(bleu)
-detect_face(blanc)
-detect_face(orange)
-detect_face(vert)
+detect_face(jaune, True)
+detect_face(rouge, True)
+detect_face(bleu, True)
+detect_face(blanc, True)
+detect_face(orange, True)
+detect_face(vert, True)
 # Affichage de l'image
 cv2.imshow("bleu", bleu)
 cv2.imshow("blanc", blanc)
@@ -210,6 +211,10 @@ s = ''.join(result)
 print(result)
 solve = kociemba.solve(s)
 print(solve)
+
+test = cv2.imread('./my.png')
+detect_face(test, False)
+cv2.imshow('test',test)
 # arret du programme
 cv2.waitKey(0)
 cv2.destroyAllWindows()
